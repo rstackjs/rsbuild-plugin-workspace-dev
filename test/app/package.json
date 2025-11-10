@@ -1,0 +1,12 @@
+{
+  "name": "@e2e/watch-build-app",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "rsbuild build",
+    "dev": "rsbuild dev"
+  },
+  "dependencies": {
+    "@e2e/watch-build-components": "workspace:*"
+  }
+}
