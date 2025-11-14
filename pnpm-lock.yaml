@@ -72,28 +72,32 @@ importers:
 
   test/app:
     dependencies:
-      '@e2e/watch-build-components':
+      '@e2e/recursive-dev-components':
         specifier: workspace:*
         version: link:../components
+    devDependencies:
+      '@rsbuild/plugin-recursive-dev':
+        specifier: workspace:*
+        version: link:../..
 
   test/components:
     dependencies:
-      '@e2e/watch-build-utils2':
+      '@e2e/recursive-dev-utils2':
         specifier: workspace:*
         version: link:../utils2
       react-dom:
         specifier: '>=16.9.0'
         version: 19.1.1(react@19.2.0)
     devDependencies:
-      '@e2e/watch-build-utils':
+      '@e2e/recursive-dev-utils':
         specifier: workspace:*
         version: link:../utils
       '@rsbuild/plugin-react':
         specifier: ^1.4.1
-        version: 1.4.1(@rsbuild/core@1.6.2)
+        version: 1.4.1(@rsbuild/core@1.6.3)
       '@rslib/core':
-        specifier: ^0.17.1
-        version: 0.17.1(typescript@5.9.3)
+        specifier: https://pkg.pr.new/@rslib/core@06563fd
+        version: https://pkg.pr.new/@rslib/core@06563fd(typescript@5.9.3)
       '@types/react':
         specifier: ^19.2.2
         version: 19.2.2
@@ -107,18 +111,18 @@ importers:
   test/utils:
     devDependencies:
       '@rslib/core':
-        specifier: ^0.17.1
-        version: 0.17.1(typescript@5.9.3)
+        specifier: https://pkg.pr.new/@rslib/core@06563fd
+        version: https://pkg.pr.new/@rslib/core@06563fd(typescript@5.9.3)
 
   test/utils2:
     dependencies:
-      '@e2e/watch-build-utils':
+      '@e2e/recursive-dev-utils':
         specifier: workspace:*
         version: link:../utils
     devDependencies:
       '@rslib/core':
-        specifier: ^0.17.1
-        version: 0.17.1(typescript@5.9.3)
+        specifier: https://pkg.pr.new/@rslib/core@06563fd
+        version: https://pkg.pr.new/@rslib/core@06563fd(typescript@5.9.3)
 
 packages:
 
@@ -349,8 +353,8 @@ packages:
     engines: {node: '>=18.12.0'}
     hasBin: true
 
-  '@rsbuild/core@1.6.2':
-    resolution: {integrity: sha512-ELlc23tDCYaXCwB//bOIF/Gnx1TtFey/DBgFDD/oN6PK7aKpAGIVSk6n9aHH3GRNXNtG/sLFtjucVm7Le3lvCA==}
+  '@rsbuild/core@1.6.3':
+    resolution: {integrity: sha512-93/j5w+nyzfTjHfch2ram+Y6Og3NUcl46nsrKojD3scBR9nSjYHjJM27pQNi0Oq7Io7vQpTMvxwuSaG7AShfRw==}
     engines: {node: '>=18.12.0'}
     hasBin: true
 
@@ -380,8 +384,9 @@ packages:
       typescript:
         optional: true
 
-  '@rslib/core@0.17.1':
-    resolution: {integrity: sha512-7mqrktQuHMkGcgIW6pBdw7xpBy5KmvTN22+RhSkj1y4FKfen/PqOPDGqGlN+kTbPSXs20kBepNkYWYV8t+6ryA==}
+  '@rslib/core@https://pkg.pr.new/@rslib/core@06563fd':
+    resolution: {tarball: https://pkg.pr.new/@rslib/core@06563fd}
+    version: 0.17.1
     engines: {node: '>=18.12.0'}
     hasBin: true
     peerDependencies:
@@ -772,8 +777,9 @@ packages:
       typescript:
         optional: true
 
-  rsbuild-plugin-dts@0.17.1:
-    resolution: {integrity: sha512-fEykqICjrvB0dqzm0WqZSQ5rXZ5r+ZYYxqIDgTDU6mHlhlAGJ+AOnX8vgujAdiyuqDF2ZiHcN0QYjxB2UwddtQ==}
+  rsbuild-plugin-dts@https://pkg.pr.new/web-infra-dev/rslib/rsbuild-plugin-dts@06563fd:
+    resolution: {tarball: https://pkg.pr.new/web-infra-dev/rslib/rsbuild-plugin-dts@06563fd}
+    version: 0.17.1
     engines: {node: '>=18.12.0'}
     peerDependencies:
       '@microsoft/api-extractor': ^7
@@ -1053,7 +1059,7 @@ snapshots:
       core-js: 3.46.0
       jiti: 2.6.1
 
-  '@rsbuild/core@1.6.2':
+  '@rsbuild/core@1.6.3':
     dependencies:
       '@rspack/core': 1.6.1(@swc/helpers@0.5.17)
       '@rspack/lite-tapable': 1.0.1
@@ -1069,9 +1075,9 @@ snapshots:
     transitivePeerDependencies:
       - webpack-hot-middleware
 
-  '@rsbuild/plugin-react@1.4.1(@rsbuild/core@1.6.2)':
+  '@rsbuild/plugin-react@1.4.1(@rsbuild/core@1.6.3)':
     dependencies:
-      '@rsbuild/core': 1.6.2
+      '@rsbuild/core': 1.6.3
       '@rspack/plugin-react-refresh': 1.5.1(react-refresh@0.17.0)
       react-refresh: 0.17.0
     transitivePeerDependencies:
@@ -1098,10 +1104,10 @@ snapshots:
     transitivePeerDependencies:
       - '@typescript/native-preview'
 
-  '@rslib/core@0.17.1(typescript@5.9.3)':
+  '@rslib/core@https://pkg.pr.new/@rslib/core@06563fd(typescript@5.9.3)':
     dependencies:
-      '@rsbuild/core': 1.6.2
-      rsbuild-plugin-dts: 0.17.1(@rsbuild/core@1.6.2)(typescript@5.9.3)
+      '@rsbuild/core': 1.6.3
+      rsbuild-plugin-dts: https://pkg.pr.new/web-infra-dev/rslib/rsbuild-plugin-dts@06563fd(@rsbuild/core@1.6.3)(typescript@5.9.3)
     optionalDependencies:
       typescript: 5.9.3
     transitivePeerDependencies:
@@ -1426,10 +1432,10 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.3
 
-  rsbuild-plugin-dts@0.17.1(@rsbuild/core@1.6.2)(typescript@5.9.3):
+  rsbuild-plugin-dts@https://pkg.pr.new/web-infra-dev/rslib/rsbuild-plugin-dts@06563fd(@rsbuild/core@1.6.3)(typescript@5.9.3):
     dependencies:
       '@ast-grep/napi': 0.37.0
-      '@rsbuild/core': 1.6.2
+      '@rsbuild/core': 1.6.3
     optionalDependencies:
       typescript: 5.9.3
 

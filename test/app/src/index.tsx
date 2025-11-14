@@ -1,4 +1,4 @@
-import { Card } from '@e2e/watch-build-components';
+import { Card } from '@e2e/recursive-dev-components';
 import ReactDOM from 'react-dom/client';
 
 const rootElement = document.getElementById('root');

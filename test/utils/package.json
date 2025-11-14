@@ -1,5 +1,5 @@
 {
-  "name": "@e2e/watch-build-utils",
+  "name": "@e2e/recursive-dev-utils",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -22,6 +22,6 @@
     "dev": "rslib build --watch"
   },
   "devDependencies": {
-    "@rslib/core": "^0.17.1"
+    "@rslib/core": "https://pkg.pr.new/@rslib/core@06563fd"
   }
 }

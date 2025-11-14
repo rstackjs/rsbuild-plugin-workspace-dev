@@ -1,5 +1,5 @@
 {
-  "name": "@e2e/watch-build-components",
+  "name": "@e2e/recursive-dev-components",
   "version": "0.0.0",
   "type": "module",
   "exports": {
@@ -17,15 +17,14 @@
     "dev": "rslib build --watch"
   },
   "dependencies": {
-    "@e2e/watch-build-utils2": "workspace:*"
   },
   "devDependencies": {
+    "@e2e/recursive-dev-utils": "workspace:*",
     "@rsbuild/plugin-react": "^1.4.1",
-    "@rslib/core": "^0.17.1",
+    "@rslib/core": "https://pkg.pr.new/@rslib/core@06563fd",
     "@types/react": "^19.2.2",
     "react": "^19.2.0",
-    "typescript": "^5.9.3",
-    "@e2e/watch-build-utils": "workspace:*"
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "react": ">=16.9.0",

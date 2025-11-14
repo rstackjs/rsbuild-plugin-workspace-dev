@@ -1,14 +1,14 @@
 {
-  "name": "@rsbuild/plugin-watch-build",
+  "name": "@rsbuild/plugin-recursive-dev",
   "version": "1.0.3",
-  "description": "An Rsbuild plugin to provides watch build functionality for Monorepo topologies.",
-  "repository": "https://github.com/rspack-contrib/rsbuild-plugin-watch-build",
+  "description": "An Rsbuild plugin to provides recursive dev functionality for Monorepo topologies.",
+  "repository": "https://github.com/rspack-contrib/rsbuild-plugin-recursive-dev",
   "license": "MIT",
   "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
+      "import": "./src/index.ts",
       "require": "./dist/index.cjs"
     }
   },
