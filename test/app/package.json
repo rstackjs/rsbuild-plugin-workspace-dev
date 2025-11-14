@@ -1,5 +1,5 @@
 {
-  "name": "@e2e/watch-build-app",
+  "name": "@e2e/recursive-dev-app",
   "private": true,
   "version": "1.0.0",
   "scripts": {
@@ -7,6 +7,10 @@
     "dev": "rsbuild dev"
   },
   "dependencies": {
-    "@e2e/watch-build-components": "workspace:*"
+    "@e2e/recursive-dev-components": "workspace:*",
+    "@e2e/recursive-dev-utils2": "workspace:*"
+  },
+  "devDependencies": {
+    "@rsbuild/plugin-recursive-dev": "workspace:*"
   }
 }
