@@ -37,6 +37,10 @@ export class Logger {
     console[logMap[type]](this[type]);
   }
 
+  emitLogOnce(type: 'stdout' | 'stderr', log: string) {
+    console[logMap[type]](log);
+  }
+
   reset(type: 'stdout' | 'stderr') {
     this[type] = '';
   }

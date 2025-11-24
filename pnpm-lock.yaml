@@ -81,9 +81,6 @@ importers:
       '@e2e/workspace-dev-components':
         specifier: workspace:*
         version: link:../components
-      '@e2e/workspace-dev-utils2':
-        specifier: workspace:*
-        version: link:../utils2
     devDependencies:
       rsbuild-plugin-workspace-dev:
         specifier: workspace:*

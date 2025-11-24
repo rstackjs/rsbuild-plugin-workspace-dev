@@ -37,6 +37,7 @@ export class WorkspaceDevRunner {
   private graph: Graph;
   private visited: Record<string, boolean>;
   private visiting: Record<string, boolean>;
+  private matched: Record<string, boolean>;
   private metaData!: Package['packageJson'];
 
   constructor(options: WorkspaceDevRunnerOptions) {
@@ -46,6 +47,7 @@ export class WorkspaceDevRunner {
     this.packages = [];
     this.visited = {};
     this.visiting = {};
+    this.matched = {};
     this.graph = new Graph({ directed: true });
   }
 
@@ -80,6 +82,7 @@ export class WorkspaceDevRunner {
       this.graph.setNode(name, node);
       this.visited[name] = false;
       this.visiting[name] = false;
+      this.matched[name] = false;
 
       const packageName = name;
       const deps = {
@@ -185,6 +188,10 @@ export class WorkspaceDevRunner {
       });
       child.stdout.on('data', async (data) => {
         const stdout = data.toString();
+        if (this.matched[node]) {
+          logger.emitLogOnce('stdout', stdout);
+          return;
+        }
         logger.appendLog('stdout', stdout);
         const match = config?.match;
         const matchResult = match
@@ -193,6 +200,7 @@ export class WorkspaceDevRunner {
 
         if (matchResult) {
           logger.flushStdout();
+          this.matched[node] = true;
           this.visited[node] = true;
           this.visiting[node] = false;
           await this.start();
@@ -202,9 +210,7 @@ export class WorkspaceDevRunner {
 
       child.stderr.on('data', (data) => {
         const stderr = data.toString();
-        logger.appendLog('stderr', stderr);
-        logger.emitLog('stderr');
-        logger.reset('stderr');
+        logger.emitLogOnce('stderr', stderr);
       });
 
       child.on('close', () => {});
