@@ -75,6 +75,9 @@ importers:
       '@e2e/recursive-dev-components':
         specifier: workspace:*
         version: link:../components
+      '@e2e/recursive-dev-utils2':
+        specifier: workspace:*
+        version: link:../utils2
     devDependencies:
       '@rsbuild/plugin-recursive-dev':
         specifier: workspace:*
@@ -82,9 +85,6 @@ importers:
 
   test/components:
     dependencies:
-      '@e2e/recursive-dev-utils2':
-        specifier: workspace:*
-        version: link:../utils2
       react-dom:
         specifier: '>=16.9.0'
         version: 19.1.1(react@19.2.0)
@@ -109,16 +109,16 @@ importers:
         version: 5.9.3
 
   test/utils:
+    dependencies:
+      '@e2e/recursive-dev-utils2':
+        specifier: workspace:*
+        version: link:../utils2
     devDependencies:
       '@rslib/core':
         specifier: https://pkg.pr.new/@rslib/core@06563fd
         version: https://pkg.pr.new/@rslib/core@06563fd(typescript@5.9.3)
 
   test/utils2:
-    dependencies:
-      '@e2e/recursive-dev-utils':
-        specifier: workspace:*
-        version: link:../utils
     devDependencies:
       '@rslib/core':
         specifier: https://pkg.pr.new/@rslib/core@06563fd

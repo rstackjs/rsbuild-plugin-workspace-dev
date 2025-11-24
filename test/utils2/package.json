@@ -21,8 +21,6 @@
     "build": "rslib build",
     "dev": "rslib build --watch"
   },
-  "dependencies": {
-  },
   "devDependencies": {
     "@rslib/core": "https://pkg.pr.new/@rslib/core@06563fd"
   }

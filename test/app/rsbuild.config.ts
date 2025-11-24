@@ -3,6 +3,16 @@ import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginRecursiveDev } from '@rsbuild/plugin-recursive-dev';
 import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 
+import { pluginLogAfterStart } from './test-plugin.js';
+
 export default defineConfig({
-  plugins: [pluginReact(), pluginTypeCheck(), pluginRecursiveDev()],
+  server: {
+    port: 8080,
+  },
+  plugins: [
+    pluginReact(),
+    pluginTypeCheck(),
+    pluginRecursiveDev(),
+    pluginLogAfterStart(),
+  ],
 });

@@ -1,15 +1,15 @@
 import type { RsbuildPlugin } from '@rsbuild/core';
-
+import { Logger } from './logger.js';
 import {
   RecursiveRunner,
   type RecursiveRunnerOptions,
-} from './recursive-runner.js';
+} from './recursive-dev.js';
 
 export function pluginRecursiveDev(
   options?: RecursiveRunnerOptions,
 ): RsbuildPlugin {
   return {
-    name: 'rsbuild-plugin-watch-dev',
+    name: 'rsbuild-plugin-recursive-dev',
     async setup(api) {
       const rootPath = api.context.rootPath;
       api.onBeforeStartDevServer(async () => {
@@ -20,6 +20,7 @@ export function pluginRecursiveDev(
 
         await runner.init();
         await runner.start();
+        Logger.setEndBanner();
       });
     },
   };

@@ -1,12 +1,11 @@
-import { add } from '@e2e/recursive-dev-utils';
-// import { square } from '@e2e/recursive-dev-utils2';
+import { messageFromUtils, messageFromUtils2 } from '@e2e/recursive-dev-utils';
 import './index.css';
 
 export const Card = () => {
   return (
     <div className="card-comp">
-      {/* <h2>Card Comp Title: {square(2)}</h2> */}
-      <article>{add(1, 2)}</article>
+      <h2 id="utils-message">Utils Message: {messageFromUtils}</h2>
+      <h2 id="utils-message2">Utils Message2: {messageFromUtils2}</h2>
     </div>
   );
 };

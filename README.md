@@ -1,1 +1,1 @@
-# @rsbuild/watch-dev-plugin
+# @rsbuild/recursive-dev-plugin

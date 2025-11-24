@@ -16,8 +16,6 @@
     "build": "rslib build",
     "dev": "rslib build --watch"
   },
-  "dependencies": {
-  },
   "devDependencies": {
     "@e2e/recursive-dev-utils": "workspace:*",
     "@rsbuild/plugin-react": "^1.4.1",

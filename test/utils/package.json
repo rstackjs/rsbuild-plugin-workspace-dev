@@ -21,6 +21,9 @@
     "build": "rslib build",
     "dev": "rslib build --watch"
   },
+  "dependencies": {
+    "@e2e/recursive-dev-utils2": "workspace:*"
+  },
   "devDependencies": {
     "@rslib/core": "https://pkg.pr.new/@rslib/core@06563fd"
   }

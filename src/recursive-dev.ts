@@ -2,8 +2,13 @@ import { getPackagesSync, type Package } from '@manypkg/get-packages';
 import { spawn } from 'child_process';
 import graphlib, { Graph } from 'graphlib';
 import path from 'path';
-import { PACKAGE_JSON, RSLIB_READY_MESSAGE } from './constant.js';
 
+import {
+  DEBUG_LOG_TITLE,
+  PACKAGE_JSON,
+  RSLIB_READY_MESSAGE,
+} from './constant.js';
+import { debugLog, Logger } from './logger.js';
 import { readPackageJson } from './utils.js';
 
 interface GraphNode {
@@ -47,7 +52,13 @@ export class RecursiveRunner {
   async init(): Promise<void> {
     this.metaData = await readPackageJson(path.join(this.cwd, PACKAGE_JSON));
     this.buildDependencyGraph();
-    this.checkGraph();
+    debugLog(
+      'Dependency graph:\n' +
+        `nodes: ${this.getNodes().join(', ')}\n` +
+        `edges: ${this.getEdges()
+          .map((edge) => `${edge.v} -> ${edge.w}`)
+          .join(', ')}\n`,
+    );
   }
 
   buildDependencyGraph() {
@@ -84,6 +95,7 @@ export class RecursiveRunner {
 
         if (isInternalDep) {
           this.graph.setEdge(packageName, depName);
+          this.checkGraph();
           const depPackage = packages.find(
             (pkg) => pkg.packageJson.name === depName,
           )!;
@@ -98,7 +110,9 @@ export class RecursiveRunner {
   checkGraph() {
     const isAcyclic = graphlib.alg.isAcyclic(this.graph);
     if (!isAcyclic) {
-      throw new Error('Graph is cyclic');
+      throw new Error(
+        DEBUG_LOG_TITLE + 'Dependency graph do not allow cycles.',
+      );
     }
     return isAcyclic;
   }
@@ -139,6 +153,7 @@ export class RecursiveRunner {
       });
 
       if (canStart && !this.visited[node] && !this.visiting[node]) {
+        debugLog(`Start visit node: ${node}`);
         const visitPromise = this.visitNodes(node);
         promises.push(visitPromise);
       }
@@ -157,19 +172,26 @@ export class RecursiveRunner {
         ['run', config?.command ? config.command : 'dev'],
         {
           cwd: path,
+          env: {
+            ...process.env,
+            FORCE_COLOR: '3',
+          },
         },
       );
-      console.log(`start--- ${name} ${config?.command || 'dev'} in ${path}`);
 
+      const logger = new Logger({
+        name,
+      });
       child.stdout.on('data', async (data) => {
         const stdout = data.toString();
-        console.log(stdout);
+        logger.appendLog('stdout', stdout);
         const match = config?.match;
         const matchResult = match
           ? match(stdout)
           : stdout.match(RSLIB_READY_MESSAGE);
+
         if (matchResult) {
-          console.log(`end--- ${name} dev in ${path}`);
+          logger.flushStdout();
           this.visited[node] = true;
           this.visiting[node] = false;
           await this.start();
@@ -178,7 +200,10 @@ export class RecursiveRunner {
       });
 
       child.stderr.on('data', (data) => {
-        console.error(data.toString());
+        const stderr = data.toString();
+        logger.appendLog('stderr', stderr);
+        logger.emitLog('stderr');
+        logger.reset('stderr');
       });
 
       child.on('close', () => {});

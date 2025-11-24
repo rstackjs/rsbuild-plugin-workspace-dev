@@ -1,1 +1,1 @@
-export const square = (x: number) => x * x;
+export const messageFromUtils2 = 'hello utils2';
