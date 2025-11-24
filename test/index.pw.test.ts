@@ -16,6 +16,7 @@ test('should run dev succeed', async ({ page }) => {
 
     const child = spawn('pnpm', ['run', 'dev'], {
       cwd,
+      shell: true,
     });
 
     child.stdout.on('data', async (data) => {

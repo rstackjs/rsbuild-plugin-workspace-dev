@@ -24,7 +24,9 @@
     "lint": "biome check .",
     "lint:write": "biome check . --write",
     "prepare": "simple-git-hooks && npm run build",
-    "test": "playwright test",
+    "test": "pnpm run test:unit && pnpm run test:e2e",
+    "test:unit": "rstest --config=./test/rstest.config.ts",
+    "test:e2e": "playwright test --config=./test/playwright.config.ts", 
     "bump": "npx bumpp"
   },
   "simple-git-hooks": {
@@ -58,7 +60,8 @@
     "react-dom": "^19.1.1",
     "simple-git-hooks": "^2.13.1",
     "typescript": "^5.9.3",
-    "@types/graphlib": "^2.1.12"
+    "@types/graphlib": "^2.1.12",
+    "@rstest/core": "^0.6.6"
   },
   "peerDependencies": {
     "@rsbuild/core": "1.x"

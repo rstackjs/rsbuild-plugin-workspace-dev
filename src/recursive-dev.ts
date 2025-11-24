@@ -176,6 +176,7 @@ export class RecursiveRunner {
             ...process.env,
             FORCE_COLOR: '3',
           },
+          shell: true,
         },
       );
 
