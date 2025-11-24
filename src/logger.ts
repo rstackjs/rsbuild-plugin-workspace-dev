@@ -68,7 +68,7 @@ export class Logger {
 }
 
 export const debugLog = (msg: string) => {
-  const isDebug = process.env.DEBUG === 'true';
+  const isDebug = process.env.DEBUG === 'rsbuild' || process.env.DEBUG === '*';
   if (isDebug) {
     console.log(DEBUG_LOG_TITLE + msg);
   }
