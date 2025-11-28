@@ -105,6 +105,7 @@ interface ProjectConfig {
 - **默认值：** `true`
 - 
 是否忽略当前项目的启动，默认值为 `true`。一般无需手动配置，当前项目通常由用户手动执行 dev 启动，无需插件干预。
+
 考虑如下场景，docs 和 lib 是在同一个项目中，而 docs 需要调试 lib 的产物，此时需要启动 `pnpm doc` 命令，而 lib 则需要启动 `pnpm dev` 命令，配置该选项到 rspress 配置中后，启动 `pnpm doc` 时会自动执行 `pnpm dev` 命令，用于启动 lib 子项目。
 ```
 ├── docs
@@ -143,6 +144,26 @@ interface ProjectConfig {
 卡住可能是因为子项目构建过慢等原因，没有日志输出是因为默认情况下子项目日志是启动完成后一次性输出的（为了避免子项目日志混和在一起交错输出），可以通过添加环境变量来开启调试模式，这会让子项目的日志实时输出。
 ```
 DEBUG=rsbuild pnpm dev
+```
+
+### 某些项目无需启动
+如果某些子项目不需要启动，只需要在 `rsbuild.config.ts` 中给指定项目配置 `skip: true` 即可。
+
+```ts
+// rsbuild.config.ts
+import { pluginWorkspaceDev } from "rsbuild-plugin-workspace-dev";
+
+export default {
+  plugins: [
+    pluginWorkspaceDev({
+      projectConfig: {
+        lib1: {
+          skip: true,
+        },
+      },
+    }),
+  ],
+};
 ```
 
 
