@@ -5,8 +5,10 @@ import path from 'path';
 
 import {
   DEBUG_LOG_TITLE,
+  MODERN_MODULE_READY_MESSAGE,
   PACKAGE_JSON,
   RSLIB_READY_MESSAGE,
+  TSUP_READY_MESSAGE,
 } from './constant.js';
 import { debugLog, Logger } from './logger.js';
 import { readPackageJson } from './utils.js';
@@ -19,20 +21,22 @@ interface GraphNode {
 
 export interface WorkspaceDevRunnerOptions {
   cwd?: string;
-  workspaceFilePath?: string;
+  workspaceFileDir?: string;
   projectConfig?: Record<
     string,
     {
       match?: (stdout: string) => boolean;
       command?: string;
+      skip?: boolean;
     }
   >;
+  ignoreSelf?: boolean;
 }
 
 export class WorkspaceDevRunner {
   private options: WorkspaceDevRunnerOptions;
   private cwd: string;
-  private workspaceFilePath: string;
+  private workspaceFileDir: string;
   private packages: Package[] = [];
   private graph: Graph;
   private visited: Record<string, boolean>;
@@ -41,9 +45,12 @@ export class WorkspaceDevRunner {
   private metaData!: Package['packageJson'];
 
   constructor(options: WorkspaceDevRunnerOptions) {
-    this.options = options;
+    this.options = {
+      ignoreSelf: true,
+      ...options,
+    };
     this.cwd = options.cwd || process.cwd();
-    this.workspaceFilePath = options.workspaceFilePath || this.cwd;
+    this.workspaceFileDir = options.workspaceFileDir || this.cwd;
     this.packages = [];
     this.visited = {};
     this.visiting = {};
@@ -64,7 +71,7 @@ export class WorkspaceDevRunner {
   }
 
   buildDependencyGraph() {
-    const { packages } = getPackagesSync(this.workspaceFilePath);
+    const { packages } = getPackagesSync(this.workspaceFileDir);
     const currentPackage = packages.find(
       (pkg) => pkg.packageJson.name === this.metaData.name,
     )!;
@@ -102,7 +109,9 @@ export class WorkspaceDevRunner {
           const depPackage = packages.find(
             (pkg) => pkg.packageJson.name === depName,
           )!;
-          initNode(depPackage);
+          if (!this.getNode(depName)) {
+            initNode(depPackage);
+          }
         }
       }
     };
@@ -111,13 +120,104 @@ export class WorkspaceDevRunner {
   }
 
   checkGraph() {
-    const isAcyclic = graphlib.alg.isAcyclic(this.graph);
-    if (!isAcyclic) {
+    const cycles = graphlib.alg.findCycles(this.graph);
+    const nonSelfCycles = cycles.filter((c) => c.length !== 1);
+    debugLog(`cycles check: ${cycles}`);
+    if (nonSelfCycles.length) {
       throw new Error(
-        DEBUG_LOG_TITLE + 'Dependency graph do not allow cycles.',
+        `${DEBUG_LOG_TITLE}Dependency graph do not allow cycles.`,
       );
     }
-    return isAcyclic;
+  }
+
+  async start() {
+    const promises = [];
+    const allNodes = this.getNodes();
+    const filterSelfNodes = allNodes.filter(
+      (node) => node !== this.metaData.name,
+    );
+    const nodes = this.options.ignoreSelf ? filterSelfNodes : allNodes;
+
+    for (const node of nodes) {
+      const dependencies = this.getDependencies(node) || [];
+      const canStart = dependencies.every((dep) => {
+        const selfStart = node === dep;
+        const isVisiting = this.visiting[dep];
+        const isVisited = selfStart || this.visited[dep];
+        return isVisited && !isVisiting;
+      });
+
+      if (canStart && !this.visited[node] && !this.visiting[node]) {
+        debugLog(`Start visit node: ${node}`);
+        const visitPromise = this.visitNodes(node);
+        promises.push(visitPromise);
+      }
+    }
+    await Promise.all(promises);
+  }
+
+  visitNodes(node: string): Promise<void> {
+    return new Promise((resolve) => {
+      const { name, path } = this.getNode(node);
+      const logger = new Logger({
+        name,
+      });
+      const config = this.options?.projectConfig?.[name];
+      if (config?.skip) {
+        this.visited[node] = true;
+        this.visiting[node] = false;
+        debugLog(`Skip visit node: ${node}`);
+        logger.flushStdout();
+        logger.emitLogOnce('stdout', `skip visit node: ${name}`);
+        return this.start().then(() => resolve());
+      }
+      this.visiting[node] = true;
+
+      const child = spawn(
+        'npm',
+        ['run', config?.command ? config.command : 'dev'],
+        {
+          cwd: path,
+          env: {
+            ...process.env,
+            FORCE_COLOR: '3',
+          },
+          shell: true,
+        },
+      );
+
+      child.stdout.on('data', async (data) => {
+        const stdout = data.toString();
+        if (this.matched[node]) {
+          const content = data.toString().replace(/\n$/, '');
+          logger.emitLogOnce('stdout', content);
+          return;
+        }
+        logger.appendLog('stdout', stdout);
+        const match = config?.match;
+        const matchResult = match
+          ? match(stdout)
+          : stdout.match(RSLIB_READY_MESSAGE) ||
+            stdout.match(MODERN_MODULE_READY_MESSAGE) ||
+            stdout.match(TSUP_READY_MESSAGE);
+
+        if (matchResult) {
+          logger.flushStdout();
+          this.matched[node] = true;
+          this.visited[node] = true;
+          this.visiting[node] = false;
+          await this.start();
+          resolve();
+        }
+      });
+
+      child.stderr.on('data', (data) => {
+        const stderr = data.toString();
+        logger.emitLogOnce('stderr', stderr);
+      });
+
+      child.on('close', () => {});
+    });
   }
 
   getDependencyGraph() {
@@ -142,78 +242,5 @@ export class WorkspaceDevRunner {
 
   getDependencies(packageName: string) {
     return this.graph.successors(packageName);
-  }
-
-  async start() {
-    const promises = [];
-    const nodes = this.getNodes().filter((node) => node !== this.metaData.name);
-    for (const node of nodes) {
-      const dependencies = this.getDependencies(node) || [];
-      const canStart = dependencies.every((dep) => {
-        const isVisiting = this.visiting[dep];
-        const isVisited = this.visited[dep];
-        return isVisited && !isVisiting;
-      });
-
-      if (canStart && !this.visited[node] && !this.visiting[node]) {
-        debugLog(`Start visit node: ${node}`);
-        const visitPromise = this.visitNodes(node);
-        promises.push(visitPromise);
-      }
-    }
-    await Promise.all(promises);
-  }
-
-  visitNodes(node: string): Promise<void> {
-    return new Promise((resolve) => {
-      this.visiting[node] = true;
-      const { name, path } = this.getNode(node);
-      const config = this.options?.projectConfig?.[name];
-
-      const child = spawn(
-        'npm',
-        ['run', config?.command ? config.command : 'dev'],
-        {
-          cwd: path,
-          env: {
-            ...process.env,
-            FORCE_COLOR: '3',
-          },
-          shell: true,
-        },
-      );
-
-      const logger = new Logger({
-        name,
-      });
-      child.stdout.on('data', async (data) => {
-        const stdout = data.toString();
-        if (this.matched[node]) {
-          logger.emitLogOnce('stdout', stdout);
-          return;
-        }
-        logger.appendLog('stdout', stdout);
-        const match = config?.match;
-        const matchResult = match
-          ? match(stdout)
-          : stdout.match(RSLIB_READY_MESSAGE);
-
-        if (matchResult) {
-          logger.flushStdout();
-          this.matched[node] = true;
-          this.visited[node] = true;
-          this.visiting[node] = false;
-          await this.start();
-          resolve();
-        }
-      });
-
-      child.stderr.on('data', (data) => {
-        const stderr = data.toString();
-        logger.emitLogOnce('stderr', stderr);
-      });
-
-      child.on('close', () => {});
-    });
   }
 }

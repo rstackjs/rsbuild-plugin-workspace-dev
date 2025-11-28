@@ -38,7 +38,8 @@ export class Logger {
   }
 
   emitLogOnce(type: 'stdout' | 'stderr', log: string) {
-    console[logMap[type]](log);
+    const logWithName = `${chalk.hex('#808080').bold(this.name)}: ${log}`;
+    console[logMap[type]](logWithName);
   }
 
   reset(type: 'stdout' | 'stderr') {
