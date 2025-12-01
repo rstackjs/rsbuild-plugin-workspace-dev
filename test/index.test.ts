@@ -127,7 +127,7 @@ it('test', async () => {
     return matched;
   };
   const runner = new WorkspaceDevRunner({
-    projectConfig: {
+    projects: {
       a: {
         match: (stdout) => matchFn(stdout, 'a'),
       },

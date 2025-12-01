@@ -22,7 +22,7 @@ interface GraphNode {
 export interface WorkspaceDevRunnerOptions {
   cwd?: string;
   workspaceFileDir?: string;
-  projectConfig?: Record<
+  projects?: Record<
     string,
     {
       match?: (stdout: string) => boolean;
@@ -30,7 +30,7 @@ export interface WorkspaceDevRunnerOptions {
       skip?: boolean;
     }
   >;
-  ignoreSelf?: boolean;
+  startCurrent?: boolean;
 }
 
 export class WorkspaceDevRunner {
@@ -46,7 +46,7 @@ export class WorkspaceDevRunner {
 
   constructor(options: WorkspaceDevRunnerOptions) {
     this.options = {
-      ignoreSelf: true,
+      startCurrent: false,
       ...options,
     };
     this.cwd = options.cwd || process.cwd();
@@ -136,7 +136,7 @@ export class WorkspaceDevRunner {
     const filterSelfNodes = allNodes.filter(
       (node) => node !== this.metaData.name,
     );
-    const nodes = this.options.ignoreSelf ? filterSelfNodes : allNodes;
+    const nodes = this.options.startCurrent ? allNodes : filterSelfNodes;
 
     for (const node of nodes) {
       const dependencies = this.getDependencies(node) || [];
@@ -162,7 +162,7 @@ export class WorkspaceDevRunner {
       const logger = new Logger({
         name,
       });
-      const config = this.options?.projectConfig?.[name];
+      const config = this.options?.projects?.[name];
       if (config?.skip) {
         this.visited[node] = true;
         this.visiting[node] = false;

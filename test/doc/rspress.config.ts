@@ -30,7 +30,7 @@ export default defineConfig({
   builderConfig: {
     plugins: [
       pluginWorkspaceDev({
-        ignoreSelf: false,
+        startCurrent: true,
       }),
     ],
   },

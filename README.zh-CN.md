@@ -78,12 +78,17 @@ lib2 依赖了 lib3：
 
 ## 选项
 
-### projectConfig
+### projects
 用于子项目的启动项配置和自定义日志匹配逻辑。
 
-- **类型：**:
+- **类型：**
 ```
-interface ProjectConfig {
+type projects = {
+  // key 为子项目 package.json name
+  [key: string]: Projects;
+}
+
+interface Projects {
   /**
    * 自定义子项目启动命令，默认值为 `dev`, 即执行 `npm run dev`。
    */
@@ -97,14 +102,25 @@ interface ProjectConfig {
    */
   skip?: boolean;
 }
+
+// 例如，配置 lib1 子项目，用 build:watch 命令启动，匹配 watch success 日志
+pluginWorkspaceDev({
+  projects: {
+    lib1: {
+      command: 'build:watch',
+      match: (stdout) => stdout.includes('watch success'),
+    },
+  },
+})
 ```
 
-### ignoreSelf
+
+### startCurrent
 
 - **类型：** `boolean`
-- **默认值：** `true`
-- 
-是否忽略当前项目的启动，默认值为 `true`。一般无需手动配置，当前项目通常由用户手动执行 dev 启动，无需插件干预。
+- **默认值：** `false`
+
+插件是否同时启动当前项目，默认值为 `false`。通常无需手动配置，当前项目通常由用户手动执行 dev 启动，无需插件干预。
 
 考虑如下场景，docs 和 lib 是在同一个项目中，而 docs 需要调试 lib 的产物，此时需要启动 `pnpm doc` 命令，而 lib 则需要启动 `pnpm dev` 命令，配置该选项到 rspress 配置中后，启动 `pnpm doc` 时会自动执行 `pnpm dev` 命令，用于启动 lib 子项目。
 ```
@@ -128,14 +144,14 @@ interface ProjectConfig {
 - **类型：** `string`
 - **默认值：** `process.cwd()`
 
-用于配置当前工作目录，默认值为当前项目目录，一般无需配置。
+用于配置当前工作目录，默认值为当前项目目录，通常无需配置。
 
 ### workspaceFileDir
 
 - **类型：** `string`
 - **默认值：** `process.cwd()`
 
-用于配置 workspace 文件目录，默认值为当前项目目录，一般无需配置。
+用于配置 workspace 文件目录，默认值为当前项目目录，通常无需配置。
 
 
 ## 常见问题
@@ -156,7 +172,7 @@ import { pluginWorkspaceDev } from "rsbuild-plugin-workspace-dev";
 export default {
   plugins: [
     pluginWorkspaceDev({
-      projectConfig: {
+      projects: {
         lib1: {
           skip: true,
         },
