@@ -58,7 +58,7 @@ Here, app is built with Rsbuild, and lib is built with Rslib. The app depends on
 }
 ```
 
-`lib2` depends on `lib3`:
+lib2 depends on lib3:
 
 ```json
 {
