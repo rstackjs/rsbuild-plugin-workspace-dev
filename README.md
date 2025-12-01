@@ -83,12 +83,17 @@ Whether a sub-project has finished starting is determined by matching sub-projec
 
 ## Options
 
-### projectConfig
+### projects
 Configure how sub-projects are started and define custom log matching logic.
 
 - Type:
 ```
-interface ProjectConfig {
+type projects = {
+  // The key is the name of the sub-project's package.json file.
+  [key: string]: Projects;
+}
+
+interface projects {
   /**
    * Custom sub-project start command. Default is `dev` (runs `npm run dev`).
    */
@@ -104,14 +109,25 @@ interface ProjectConfig {
    */
   skip?: boolean;
 }
+
+
+// For example, to configure lib1 sub-project to use build:watch command and match watch success log
+pluginWorkspaceDev({
+  projects: {
+    lib1: {
+      command: 'build:watch',
+      match: (stdout) => stdout.includes('watch success'),
+    },
+  },
+})
 ```
 
-### ignoreSelf
+### startCurrent
 
 - Type: `boolean`
-- Default: `true`
+- Default: `false`
 
-Whether to ignore starting the current project. The default is `true`. In most cases, you start the current project manually, so the plugin does not interfere.
+Whether to also start the current project. The default is `false`. In most cases, you start the current project manually, so the plugin does not interfere.
 
 Consider a scenario where docs and lib are in the same project, and docs needs to debug the output of lib. In this case, you want to run `pnpm doc` for the docs, while lib should run `pnpm dev`. After configuring this option in your Rspress config, starting `pnpm doc` will automatically run `pnpm dev` to start the lib sub-project.
 
@@ -166,7 +182,7 @@ import { pluginWorkspaceDev } from "rsbuild-plugin-workspace-dev";
 export default {
   plugins: [
     pluginWorkspaceDev({
-      projectConfig: {
+      projects: {
         lib1: {
           skip: true,
         },
