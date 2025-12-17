@@ -87,10 +87,7 @@ export class WorkspaceDevRunner {
         path: dir,
       };
       const skip = this.options.projects?.[name]?.skip;
-      if (skip && skip !== 'only') {
-        console.log(
-          `${PLUGIN_LOG_TITLE} Prune project ${name} and its dependencies because it is marked as skip: true`,
-        );
+      if (skip === true) {
         return;
       }
       this.graph.setNode(name, node);
@@ -111,14 +108,24 @@ export class WorkspaceDevRunner {
         );
 
         const skip = this.options.projects?.[depName]?.skip;
-        if (isInternalDep && skip !== true) {
-          this.graph.setEdge(packageName, depName);
-          this.checkGraph();
-          const depPackage = packages.find(
-            (pkg) => pkg.packageJson.name === depName,
-          )!;
-          if (!this.getNode(depName)) {
-            initNode(depPackage);
+        if (isInternalDep) {
+          if (skip !== true) {
+            this.graph.setEdge(packageName, depName);
+            this.checkGraph();
+            const depPackage = packages.find(
+              (pkg) => pkg.packageJson.name === depName,
+            )!;
+            if (!this.getNode(depName)) {
+              initNode(depPackage);
+            }
+          } else {
+            const logger = new Logger({
+              name: depName,
+            });
+            logger.emitLogOnce(
+              'stdout',
+              `Prune project ${depName} and its dependencies because it is marked as skip: true`,
+            );
           }
         }
       }
