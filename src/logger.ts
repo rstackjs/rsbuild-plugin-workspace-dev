@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { DEBUG_LOG_TITLE } from './constant.js';
+import { PLUGIN_LOG_TITLE } from './constant.js';
 import { isDebug } from './utils.js';
 
 enum LogType {
@@ -26,7 +26,7 @@ export class Logger {
     this.name = name;
     this.stdout = '';
     this.stderr = '';
-    this.logTitle = DEBUG_LOG_TITLE;
+    this.logTitle = PLUGIN_LOG_TITLE;
   }
 
   appendLog(type: 'stdout' | 'stderr', log: string) {
@@ -71,7 +71,7 @@ export class Logger {
   }
 }
 
-export const debugLog = (msg: string, prefix = DEBUG_LOG_TITLE) => {
+export const debugLog = (msg: string, prefix = PLUGIN_LOG_TITLE) => {
   if (isDebug) {
     console.log(prefix + msg);
   }

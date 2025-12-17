@@ -17,7 +17,20 @@ export function pluginWorkspaceDev(
           cwd: rootPath,
           ...options,
         });
+        await runner.init();
+        await runner.start();
+        Logger.setEndBanner();
+      });
 
+      api.onBeforeBuild(async ({ isWatch, isFirstCompile }) => {
+        if (!isWatch || !isFirstCompile) {
+          return;
+        }
+
+        const runner = new WorkspaceDevRunner({
+          cwd: rootPath,
+          ...options,
+        });
         await runner.init();
         await runner.start();
         Logger.setEndBanner();

@@ -99,8 +99,10 @@ interface Projects {
   match?: (stdout: string) => boolean;
   /**
    * 是否跳过当前子项目的启动，默认值为 `false`，通常用于跳过一些不需要启动的子项目。
+   * 当值为 `true` 时，会从指定项目进行剪枝，这意味着该项目以及他的所有直接和间接依赖都不会被插件启动。
+   * 当值为 `only` 时，会跳过指定项目的启动，但不会进行剪枝，这意味着该项目的直接和间接依赖仍然会被插件启动。
    */
-  skip?: boolean;
+  skip?: boolean | 'only';
 }
 
 // 例如，配置 lib1 子项目，用 build:watch 命令启动，匹配 watch success 日志

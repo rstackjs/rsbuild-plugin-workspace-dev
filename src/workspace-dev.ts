@@ -4,9 +4,9 @@ import graphlib, { Graph } from 'graphlib';
 import path from 'path';
 
 import {
-  DEBUG_LOG_TITLE,
   MODERN_MODULE_READY_MESSAGE,
   PACKAGE_JSON,
+  PLUGIN_LOG_TITLE,
   RSLIB_READY_MESSAGE,
   TSUP_READY_MESSAGE,
 } from './constant.js';
@@ -27,7 +27,7 @@ export interface WorkspaceDevRunnerOptions {
     {
       match?: (stdout: string) => boolean;
       command?: string;
-      skip?: boolean;
+      skip?: boolean | 'only';
     }
   >;
   startCurrent?: boolean;
@@ -86,6 +86,10 @@ export class WorkspaceDevRunner {
         packageJson,
         path: dir,
       };
+      const skip = this.options.projects?.[name]?.skip;
+      if (skip === true) {
+        return;
+      }
       this.graph.setNode(name, node);
       this.visited[name] = false;
       this.visiting[name] = false;
@@ -103,14 +107,21 @@ export class WorkspaceDevRunner {
           (p) => p.packageJson.name === depName,
         );
 
+        const skip = this.options.projects?.[depName]?.skip;
         if (isInternalDep) {
-          this.graph.setEdge(packageName, depName);
-          this.checkGraph();
-          const depPackage = packages.find(
-            (pkg) => pkg.packageJson.name === depName,
-          )!;
-          if (!this.getNode(depName)) {
-            initNode(depPackage);
+          if (skip !== true) {
+            this.graph.setEdge(packageName, depName);
+            this.checkGraph();
+            const depPackage = packages.find(
+              (pkg) => pkg.packageJson.name === depName,
+            )!;
+            if (!this.getNode(depName)) {
+              initNode(depPackage);
+            }
+          } else {
+            debugLog(
+              `Prune project ${depName} and its dependencies because it is marked as skip: true`,
+            );
           }
         }
       }
@@ -122,10 +133,13 @@ export class WorkspaceDevRunner {
   checkGraph() {
     const cycles = graphlib.alg.findCycles(this.graph);
     const nonSelfCycles = cycles.filter((c) => c.length !== 1);
-    debugLog(`cycles check: ${cycles}`);
-    if (nonSelfCycles.length) {
+    const nonSkipCycles = nonSelfCycles.filter((group) => {
+      const isSkip = group.some((node) => this.options.projects?.[node]?.skip);
+      return !isSkip;
+    });
+    if (nonSkipCycles.length) {
       throw new Error(
-        `${DEBUG_LOG_TITLE}Dependency graph do not allow cycles.`,
+        `${PLUGIN_LOG_TITLE} Cycle dependency graph found: ${nonSkipCycles}, you should config projects in plugin options to skip someone, or fix the cycle dependency. Otherwise, a loop of dev will occur.`,
       );
     }
   }
@@ -143,7 +157,8 @@ export class WorkspaceDevRunner {
       const canStart = dependencies.every((dep) => {
         const selfStart = node === dep;
         const isVisiting = this.visiting[dep];
-        const isVisited = selfStart || this.visited[dep];
+        const skipDep = this.options.projects?.[dep]?.skip;
+        const isVisited = selfStart || this.visited[dep] || skipDep;
         return isVisited && !isVisiting;
       });
 
@@ -167,7 +182,7 @@ export class WorkspaceDevRunner {
         this.visited[node] = true;
         this.visiting[node] = false;
         debugLog(`Skip visit node: ${node}`);
-        logger.emitLogOnce('stdout', `skip visit node: ${name}`);
+        logger.emitLogOnce('stdout', `Skip visit node: ${name}`);
         return this.start().then(() => resolve());
       }
       this.visiting[node] = true;
