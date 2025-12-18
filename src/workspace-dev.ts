@@ -1,8 +1,7 @@
-import { getPackagesSync, type Package } from '@manypkg/get-packages';
+import { getPackagesSync } from '@manypkg/get-packages';
 import { spawn } from 'child_process';
 import graphlib, { Graph } from 'graphlib';
-import path from 'path';
-
+import { join } from 'path';
 import {
   MODERN_MODULE_READY_MESSAGE,
   PACKAGE_JSON,
@@ -11,11 +10,12 @@ import {
   TSUP_READY_MESSAGE,
 } from './constant.js';
 import { debugLog, Logger } from './logger.js';
+import type { PackageWithScripts } from './types.js';
 import { readPackageJson } from './utils.js';
 
 interface GraphNode {
   name: string;
-  packageJson: Package['packageJson'];
+  packageJson: PackageWithScripts['packageJson'];
   path: string;
 }
 
@@ -37,12 +37,12 @@ export class WorkspaceDevRunner {
   private options: WorkspaceDevRunnerOptions;
   private cwd: string;
   private workspaceFileDir: string;
-  private packages: Package[] = [];
+  private packages: PackageWithScripts[] = [];
   private graph: Graph;
   private visited: Record<string, boolean>;
   private visiting: Record<string, boolean>;
   private matched: Record<string, boolean>;
-  private metaData!: Package['packageJson'];
+  private metaData!: PackageWithScripts['packageJson'];
 
   constructor(options: WorkspaceDevRunnerOptions) {
     this.options = {
@@ -59,7 +59,7 @@ export class WorkspaceDevRunner {
   }
 
   async init(): Promise<void> {
-    this.metaData = await readPackageJson(path.join(this.cwd, PACKAGE_JSON));
+    this.metaData = await readPackageJson(join(this.cwd, PACKAGE_JSON));
     this.buildDependencyGraph();
     debugLog(
       'Dependency graph:\n' +
@@ -77,7 +77,7 @@ export class WorkspaceDevRunner {
     )!;
     this.packages = packages;
 
-    const initNode = (pkg: Package) => {
+    const initNode = (pkg: PackageWithScripts) => {
       const { packageJson, dir } = pkg;
       const { name, dependencies, devDependencies, peerDependencies } =
         packageJson;
@@ -173,12 +173,15 @@ export class WorkspaceDevRunner {
 
   visitNodes(node: string): Promise<void> {
     return new Promise((resolve) => {
-      const { name, path } = this.getNode(node);
+      const { name, path, packageJson } = this.getNode(node);
       const logger = new Logger({
         name,
       });
+
       const config = this.options?.projects?.[name];
-      if (config?.skip) {
+      const command = config?.command ? config.command : 'dev';
+      const scripts = packageJson.scripts || {};
+      if (config?.skip || !scripts[command]) {
         this.visited[node] = true;
         this.visiting[node] = false;
         debugLog(`Skip visit node: ${node}`);
@@ -187,18 +190,14 @@ export class WorkspaceDevRunner {
       }
       this.visiting[node] = true;
 
-      const child = spawn(
-        'npm',
-        ['run', config?.command ? config.command : 'dev'],
-        {
-          cwd: path,
-          env: {
-            ...process.env,
-            FORCE_COLOR: '3',
-          },
-          shell: true,
+      const child = spawn('npm', ['run', command], {
+        cwd: path,
+        env: {
+          ...process.env,
+          FORCE_COLOR: '3',
         },
-      );
+        shell: true,
+      });
 
       child.stdout.on('data', async (data) => {
         const stdout = data.toString();

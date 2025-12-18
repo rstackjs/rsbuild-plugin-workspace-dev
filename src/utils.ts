@@ -1,6 +1,7 @@
-import type { Package } from '@manypkg/get-packages';
 import fs from 'fs';
 import json5 from 'json5';
+
+import type { PackageWithScripts } from './types.js';
 
 async function pathExists(path: string) {
   return fs.promises
@@ -21,8 +22,8 @@ export const readJson = async <T>(jsonFileAbsPath: string): Promise<T> => {
 
 export const readPackageJson = async (
   pkgJsonFilePath: string,
-): Promise<Package['packageJson']> => {
-  return readJson<Package['packageJson']>(pkgJsonFilePath);
+): Promise<PackageWithScripts['packageJson']> => {
+  return readJson<PackageWithScripts['packageJson']>(pkgJsonFilePath);
 };
 
 export const isDebug =
