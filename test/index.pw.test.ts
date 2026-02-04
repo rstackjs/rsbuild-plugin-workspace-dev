@@ -14,9 +14,14 @@ test('should run dev succeed', async ({ page }) => {
     let testCompleted = false;
     let serverStarted = false;
 
-    const child = spawn('pnpm', ['run', 'dev'], {
+    const command = process.platform === 'win32' ? 'cmd.exe' : 'pnpm';
+    const args =
+      process.platform === 'win32'
+        ? ['/c', 'pnpm', 'run', 'dev']
+        : ['run', 'dev'];
+
+    const child = spawn(command, args, {
       cwd,
-      shell: true,
     });
 
     child.stdout.on('data', async (data) => {

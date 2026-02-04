@@ -189,13 +189,18 @@ export class WorkspaceDevRunner {
       }
       this.visiting[node] = true;
 
-      const child = spawn('npm', ['run', command], {
+      const spawnCommand = process.platform === 'win32' ? 'cmd.exe' : 'npm';
+      const spawnArgs =
+        process.platform === 'win32'
+          ? ['/c', 'npm', 'run', command]
+          : ['run', command];
+
+      const child = spawn(spawnCommand, spawnArgs, {
         cwd: path,
         env: {
           ...process.env,
           FORCE_COLOR: '3',
         },
-        shell: true,
       });
 
       child.stdout.on('data', async (data) => {
