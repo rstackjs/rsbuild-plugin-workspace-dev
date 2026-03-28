@@ -74,7 +74,7 @@ When you run `pnpm dev` under app, sub-projects start in topological order: firs
 ```json
 {
   "scripts": {
-    "dev": "rslib build --watch"
+    "dev": "rslib -w"
   }
 }
 ```
@@ -144,7 +144,7 @@ Consider a scenario where docs and lib are in the same project, and docs needs t
 
 ```
 "scripts": {
-  "dev": "rslib build --watch",
+  "dev": "rslib -w",
   "doc": "rspress dev"
 },
 ```

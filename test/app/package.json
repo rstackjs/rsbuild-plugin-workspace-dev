@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "rsbuild build",
-    "dev": "rsbuild dev"
+    "dev": "rsbuild"
   },
   "dependencies": {
     "@e2e/workspace-dev-components": "workspace:*"

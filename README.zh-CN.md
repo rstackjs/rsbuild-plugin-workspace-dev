@@ -70,7 +70,7 @@ lib2 依赖了 lib3：
 ```json
 {
   "scripts": {
-    "dev": "rslib build --watch"
+    "dev": "rslib -w"
   }
 }
 ```
@@ -136,7 +136,7 @@ pluginWorkspaceDev({
 ```
 ```
 "scripts": {
-  "dev": "rslib build --watch",
+  "dev": "rslib -w",
   "doc": "rspress dev"
 },
 ```
