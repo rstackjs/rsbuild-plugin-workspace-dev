@@ -35,10 +35,10 @@ importers:
         version: 1.4.1(@rsbuild/core@1.6.1)
       '@rsbuild/plugin-type-check':
         specifier: ^1.3.0
-        version: 1.3.0(@rsbuild/core@1.6.1)(@rspack/core@1.6.4(@swc/helpers@0.5.17))(typescript@5.9.3)
+        version: 1.3.0(@rsbuild/core@1.6.1)(@rspack/core@1.6.4(@swc/helpers@0.5.17))(typescript@6.0.2)
       '@rslib/core':
         specifier: ^0.17.0
-        version: 0.17.0(typescript@5.9.3)
+        version: 0.17.0(typescript@6.0.2)
       '@rstest/core':
         specifier: ^0.6.6
         version: 0.6.6
@@ -67,8 +67,8 @@ importers:
         specifier: ^2.13.1
         version: 2.13.1
       typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
+        specifier: ^6.0.2
+        version: 6.0.2
 
   test/app:
     dependencies:
@@ -2627,6 +2627,11 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  typescript@6.0.2:
+    resolution: {integrity: sha512-bGdAIrZ0wiGDo5l8c++HWtbaNCWTS4UTv7RaTH/ThVIgjkveJt83m74bBHMJkuCbslY8ixgLBVZJIOiQlQTjfQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   unc-path-regex@0.1.2:
     resolution: {integrity: sha512-eXL4nmJT7oCpkZsHZUOJo8hcX3GbsiDOa0Qu9F646fi8dT3XuSVopVqAcEiVzSKKH7UoDti23wNX3qGFxcW5Qg==}
     engines: {node: '>=0.10.0'}
@@ -3375,12 +3380,12 @@ snapshots:
       - solid-js
       - supports-color
 
-  '@rsbuild/plugin-type-check@1.3.0(@rsbuild/core@1.6.1)(@rspack/core@1.6.4(@swc/helpers@0.5.17))(typescript@5.9.3)':
+  '@rsbuild/plugin-type-check@1.3.0(@rsbuild/core@1.6.1)(@rspack/core@1.6.4(@swc/helpers@0.5.17))(typescript@6.0.2)':
     dependencies:
       deepmerge: 4.3.1
       json5: 2.2.3
       reduce-configs: 1.1.1
-      ts-checker-rspack-plugin: 1.2.0(@rspack/core@1.6.4(@swc/helpers@0.5.17))(typescript@5.9.3)
+      ts-checker-rspack-plugin: 1.2.0(@rspack/core@1.6.4(@swc/helpers@0.5.17))(typescript@6.0.2)
     optionalDependencies:
       '@rsbuild/core': 1.6.1
     transitivePeerDependencies:
@@ -3396,12 +3401,12 @@ snapshots:
     transitivePeerDependencies:
       - '@typescript/native-preview'
 
-  '@rslib/core@0.17.0(typescript@5.9.3)':
+  '@rslib/core@0.17.0(typescript@6.0.2)':
     dependencies:
       '@rsbuild/core': 1.6.1
-      rsbuild-plugin-dts: 0.17.0(@rsbuild/core@1.6.1)(typescript@5.9.3)
+      rsbuild-plugin-dts: 0.17.0(@rsbuild/core@1.6.1)(typescript@6.0.2)
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
     transitivePeerDependencies:
       - '@typescript/native-preview'
 
@@ -5855,12 +5860,12 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.3
 
-  rsbuild-plugin-dts@0.17.0(@rsbuild/core@1.6.1)(typescript@5.9.3):
+  rsbuild-plugin-dts@0.17.0(@rsbuild/core@1.6.1)(typescript@6.0.2):
     dependencies:
       '@ast-grep/napi': 0.37.0
       '@rsbuild/core': 1.6.1
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   rsbuild-plugin-dts@0.18.0(@rsbuild/core@1.6.8)(typescript@5.9.3):
     dependencies:
@@ -6019,7 +6024,7 @@ snapshots:
 
   trough@2.2.0: {}
 
-  ts-checker-rspack-plugin@1.2.0(@rspack/core@1.6.4(@swc/helpers@0.5.17))(typescript@5.9.3):
+  ts-checker-rspack-plugin@1.2.0(@rspack/core@1.6.4(@swc/helpers@0.5.17))(typescript@6.0.2):
     dependencies:
       '@babel/code-frame': 7.27.1
       '@rspack/lite-tapable': 1.0.1
@@ -6028,7 +6033,7 @@ snapshots:
       memfs: 4.50.0
       minimatch: 9.0.5
       picocolors: 1.1.1
-      typescript: 5.9.3
+      typescript: 6.0.2
     optionalDependencies:
       '@rspack/core': 1.6.4(@swc/helpers@0.5.17)
 
@@ -6037,6 +6042,8 @@ snapshots:
   type-fest@2.19.0: {}
 
   typescript@5.9.3: {}
+
+  typescript@6.0.2: {}
 
   unc-path-regex@0.1.2: {}
 
