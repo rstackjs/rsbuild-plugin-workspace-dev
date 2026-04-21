@@ -52,7 +52,7 @@
     "@rslib/core": "^0.21.2",
     "@rstest/core": "^0.9.8",
     "@types/graphlib": "^2.1.12",
-    "@types/node": "^22.19.17",
+    "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "playwright": "^1.59.1",
