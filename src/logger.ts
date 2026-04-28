@@ -18,11 +18,7 @@ export class Logger {
   name: string;
   logTitle: string;
 
-  constructor({
-    name,
-  }: {
-    name: string;
-  }) {
+  constructor({ name }: { name: string }) {
     this.name = name;
     this.stdout = '';
     this.stderr = '';

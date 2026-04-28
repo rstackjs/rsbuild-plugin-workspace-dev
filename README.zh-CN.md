@@ -23,7 +23,7 @@ pnpm add rsbuild-plugin-workspace-dev -D
 
 ```ts
 // rsbuild.config.ts
-import { pluginWorkspaceDev } from "rsbuild-plugin-workspace-dev";
+import { pluginWorkspaceDev } from 'rsbuild-plugin-workspace-dev';
 
 export default {
   plugins: [pluginWorkspaceDev()],
@@ -66,7 +66,9 @@ lib2 依赖了 lib3：
   }
 }
 ```
+
 此时在 app 下执行 `pnpm dev` 后，会按照拓扑顺序先启动 lib1 和 lib3，再启动 lib2，最后启动 app。此处启动 lib 指的是执行 lib 的 dev 命令
+
 ```json
 {
   "scripts": {
@@ -74,14 +76,17 @@ lib2 依赖了 lib3：
   }
 }
 ```
+
 识别子项目是否启动完成是通过匹配子项目日志实现的，默认支持匹配 Rslib、tsup 子项目，同时支持手动配置 match 匹配日志。
 
 ## 选项
 
 ### projects
+
 用于子项目的启动项配置和自定义日志匹配逻辑。
 
 - **类型：**
+
 ```
 type projects = {
   // key 为子项目 package.json name
@@ -116,7 +121,6 @@ pluginWorkspaceDev({
 })
 ```
 
-
 ### startCurrent
 
 - **类型：** `boolean`
@@ -125,6 +129,7 @@ pluginWorkspaceDev({
 插件是否同时启动当前项目，默认值为 `false`。通常无需手动配置，当前项目通常由用户手动执行 dev 启动，无需插件干预。
 
 考虑如下场景，docs 和 lib 是在同一个项目中，而 docs 需要调试 lib 的产物，此时需要启动 `pnpm doc` 命令，而 lib 则需要启动 `pnpm dev` 命令，配置该选项到 rspress 配置中后，启动 `pnpm doc` 时会自动执行 `pnpm dev` 命令，用于启动 lib 子项目。
+
 ```
 ├── docs
 │   └── index.mdx
@@ -134,6 +139,7 @@ pluginWorkspaceDev({
 ├── rslib.config.ts
 ├── rspress.config.ts
 ```
+
 ```
 "scripts": {
   "dev": "rslib -w",
@@ -155,21 +161,23 @@ pluginWorkspaceDev({
 
 用于配置 workspace 文件目录，默认值为当前项目目录，通常无需配置。
 
-
 ## 常见问题
 
 ### 启动项目时卡住
+
 卡住可能是因为子项目构建过慢等原因，没有日志输出是因为默认情况下子项目日志是启动完成后一次性输出的（为了避免子项目日志混和在一起交错输出），可以通过添加环境变量来开启调试模式，这会让子项目的日志实时输出。
+
 ```
 DEBUG=rsbuild pnpm dev
 ```
 
 ### 某些项目无需启动
+
 如果某些子项目不需要启动，只需要在 `rsbuild.config.ts` 中给指定项目配置 `skip: true` 即可。
 
 ```ts
 // rsbuild.config.ts
-import { pluginWorkspaceDev } from "rsbuild-plugin-workspace-dev";
+import { pluginWorkspaceDev } from 'rsbuild-plugin-workspace-dev';
 
 export default {
   plugins: [
@@ -183,7 +191,6 @@ export default {
   ],
 };
 ```
-
 
 ## License
 
