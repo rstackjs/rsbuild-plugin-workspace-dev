@@ -1,6 +1,7 @@
 import { getPackagesSync } from '@manypkg/get-packages';
 import { expect, it, rs } from '@rstest/core';
 import { exec, spawn } from 'child_process';
+import type { PackageWithScripts } from '../src/types';
 import { readPackageJson } from '../src/utils';
 import { WorkspaceDevRunner } from '../src/workspace-dev';
 
@@ -78,8 +79,9 @@ rs.mock('@manypkg/get-packages', () => {
 
 rs.mock('../src/utils', () => ({
   readPackageJson: () => {
-    // @ts-expect-error
-    const { packages } = getPackagesSync();
+    const { packages } = getPackagesSync(process.cwd()) as {
+      packages: PackageWithScripts[];
+    };
     const hostPackage = packages.find((pkg) => pkg.packageJson.name === 'a')!;
 
     return hostPackage.packageJson;
@@ -87,13 +89,13 @@ rs.mock('../src/utils', () => ({
 }));
 
 rs.mock('child_process', () => ({
-  spawn: (cmd: string, args: string[], options: any) => {
-    // @ts-expect-error
-    const { packages } = getPackagesSync();
+  spawn: (cmd: string, args: string[], options: { cwd: string }) => {
+    const { packages } = getPackagesSync(process.cwd()) as {
+      packages: PackageWithScripts[];
+    };
     const cwd = options.cwd;
-    const devScript =
-      // @ts-expect-error
-      packages.find((pkg) => pkg.dir === cwd)!.packageJson.scripts['dev'];
+    const devScript = packages.find((pkg) => pkg.dir === cwd)!.packageJson
+      .scripts!['dev'];
 
     const mockStdout = {
       on: rs.fn((event, callback) => {

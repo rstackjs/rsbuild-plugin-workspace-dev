@@ -25,7 +25,7 @@ Register the plugin in `rsbuild.config.ts`:
 
 ```ts
 // rsbuild.config.ts
-import { pluginWorkspaceDev } from "rsbuild-plugin-workspace-dev";
+import { pluginWorkspaceDev } from 'rsbuild-plugin-workspace-dev';
 
 export default {
   plugins: [pluginWorkspaceDev()],
@@ -84,9 +84,11 @@ Whether a sub-project has finished starting is determined by matching sub-projec
 ## Options
 
 ### projects
+
 Configure how sub-projects are started and define custom log matching logic.
 
 - Type:
+
 ```
 type projects = {
   // The key is the name of the sub-project's package.json file.
@@ -166,6 +168,7 @@ Set the directory where the workspace file resides. The default is the current p
 ## Frequently Asked Questions
 
 ### Project startup stuck
+
 Stuck may be due to slow sub-project builds, etc. The lack of log output is because, by default, sub-project logs are output all at once after startup (to avoid interleaving sub-project logs). You can enable debug mode by adding an environment variable, which will allow sub-project logs to be output in real time.
 
 ```
@@ -178,7 +181,7 @@ If some sub-projects don't need to start, simply configure `skip: true` for the 
 
 ```ts
 // rsbuild.config.ts
-import { pluginWorkspaceDev } from "rsbuild-plugin-workspace-dev";
+import { pluginWorkspaceDev } from 'rsbuild-plugin-workspace-dev';
 
 export default {
   plugins: [
