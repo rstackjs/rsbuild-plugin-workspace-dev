@@ -1,2 +1,6 @@
 packages:
   - 'test/**'
+
+allowBuilds:
+  core-js: false
+  simple-git-hooks: false
