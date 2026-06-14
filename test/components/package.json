@@ -19,9 +19,9 @@
   "devDependencies": {
     "@e2e/workspace-dev-utils": "workspace:*",
     "@rsbuild/plugin-react": "^2.0.1",
-    "@rslib/core": "0.22.0",
-    "@types/react": "^19.2.15",
-    "react": "^19.2.6",
+    "@rslib/core": "0.22.1",
+    "@types/react": "^19.2.17",
+    "react": "^19.2.7",
     "typescript": "^6.0.3"
   },
   "peerDependencies": {
