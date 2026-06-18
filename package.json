@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "An Rsbuild plugin to provides workspace recursive dev functionality for Monorepo topologies.",
   "repository": "https://github.com/rstackjs/rsbuild-plugin-workspace-dev",
+  "homepage": "https://github.com/rstackjs/rsbuild-plugin-workspace-dev#readme",
+  "bugs": {
+    "url": "https://github.com/rstackjs/rsbuild-plugin-workspace-dev/issues"
+  },
   "license": "MIT",
   "type": "module",
   "exports": {
