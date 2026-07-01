@@ -25,6 +25,6 @@
     "@e2e/workspace-dev-utils2": "workspace:*"
   },
   "devDependencies": {
-    "@rslib/core": "0.22.1"
+    "@rslib/core": "0.23.1"
   }
 }
