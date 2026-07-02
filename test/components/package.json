@@ -18,8 +18,8 @@
   },
   "devDependencies": {
     "@e2e/workspace-dev-utils": "workspace:*",
-    "@rsbuild/plugin-react": "^2.0.1",
-    "@rslib/core": "0.22.1",
+    "@rsbuild/plugin-react": "^2.1.0",
+    "@rslib/core": "0.23.1",
     "@types/react": "^19.2.17",
     "react": "^19.2.7",
     "typescript": "^6.0.3"
