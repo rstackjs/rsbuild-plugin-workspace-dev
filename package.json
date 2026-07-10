@@ -27,9 +27,7 @@
     "lint": "rslint && prettier -c .",
     "lint:write": "rslint --fix && prettier -w .",
     "prepare": "simple-git-hooks",
-    "test": "rstest --config=./test/rstest.config.ts",
-    "test:e2e": "rstest --config=./test/rstest.config.ts --project=e2e",
-    "test:unit": "rstest --config=./test/rstest.config.ts --project=unit"
+    "test": "rstest --config=./test/rstest.config.ts"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm run lint:write"
