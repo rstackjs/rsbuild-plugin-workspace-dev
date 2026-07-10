@@ -27,9 +27,7 @@
     "lint": "rslint && prettier -c .",
     "lint:write": "rslint --fix && prettier -w .",
     "prepare": "simple-git-hooks",
-    "test": "pnpm run test:unit && pnpm run test:e2e",
-    "test:e2e": "playwright test --config=./test/playwright.config.ts",
-    "test:unit": "rstest --config=./test/rstest.config.ts"
+    "test": "rstest"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm run lint:write"
@@ -41,13 +39,13 @@
     "json5": "^2.2.3"
   },
   "devDependencies": {
-    "@playwright/test": "^1.61.1",
     "@rsbuild/core": "^2.1.2",
     "@rsbuild/plugin-react": "^2.1.0",
     "@rsbuild/plugin-type-check": "^1.5.0",
     "@rslib/core": "^0.23.1",
     "@rslint/core": "^0.6.4",
-    "@rstest/core": "^0.10.6",
+    "@rstest/core": "^0.11.1",
+    "@rstest/playwright": "^0.11.1",
     "@types/graphlib": "^2.1.12",
     "@types/node": "^24.13.2",
     "@types/react": "^19.2.17",

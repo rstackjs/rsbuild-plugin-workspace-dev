@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@rstest/playwright';
 
 import { TEST_SUIT_STARTED } from './constant.js';
 
