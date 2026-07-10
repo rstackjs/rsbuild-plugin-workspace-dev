@@ -9,5 +9,4 @@ export default defineConfig({
   include: ['./**/*.pw.test.ts'],
   isolate: false,
   retry: process.env.CI ? 3 : 0,
-  testTimeout: 30_000,
 });
