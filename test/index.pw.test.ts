@@ -6,7 +6,6 @@ import { expect, test } from '@rstest/playwright';
 import { TEST_SUIT_STARTED } from './constant.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const expectTimeout = process.env.CI ? 10_000 : 5_000;
 
 test('should run dev succeed', async ({ page }) => {
   const cwd = join(__dirname, 'app');
@@ -40,12 +39,10 @@ test('should run dev succeed', async ({ page }) => {
           const utilsMessageLocator = page.locator('#utils-message');
           await expect(utilsMessageLocator).toHaveText(
             'Utils Message: hello utils1',
-            { timeout: expectTimeout },
           );
           const utilsMessage2Locator = page.locator('#utils-message2');
           await expect(utilsMessage2Locator).toHaveText(
             'Utils Message2: hello utils2',
-            { timeout: expectTimeout },
           );
 
           testCompleted = true;
