@@ -30,7 +30,7 @@
     "@types/react": "^19.2.17",
     "react": "^19.2.7",
     "rsbuild-plugin-workspace-dev": "workspace:*",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   },
   "peerDependencies": {
     "react": ">=19.0.0",
