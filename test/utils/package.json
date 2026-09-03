@@ -18,13 +18,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "rslib",
-    "dev": "rslib -w"
+    "build": "rs lib",
+    "dev": "rs lib -w"
   },
   "dependencies": {
     "@e2e/workspace-dev-utils2": "workspace:*"
-  },
-  "devDependencies": {
-    "@rslib/core": "0.23.2"
   }
 }

@@ -3,7 +3,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect, test } from '@rstest/playwright';
 
-import { TEST_SUIT_STARTED } from './constant.js';
+import { TEST_SUIT_STARTED } from './constant.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

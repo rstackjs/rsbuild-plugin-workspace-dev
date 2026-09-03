@@ -10,6 +10,7 @@
     "resolveJsonModule": true,
     "moduleResolution": "bundler",
     "useDefineForClassFields": true,
+    "types": ["rstack/types"],
     "paths": {
       "@/*": ["./src/*"],
       "@card/*": ["./src/card/*"]

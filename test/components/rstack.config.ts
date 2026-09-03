@@ -1,7 +1,8 @@
+// Configuration guide: https://rstack.rs/config
 import { pluginReact } from '@rsbuild/plugin-react';
-import { defineConfig } from '@rslib/core';
+import { define } from 'rstack';
 
-export default defineConfig({
+define.lib({
   source: {
     entry: {
       index: ['./src/**'],

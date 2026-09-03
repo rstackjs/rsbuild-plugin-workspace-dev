@@ -1,7 +1,7 @@
 import fs from 'fs';
 import json5 from 'json5';
 
-import type { PackageWithScripts } from './types.js';
+import type { PackageWithScripts } from './types.ts';
 
 async function pathExists(path: string) {
   return fs.promises

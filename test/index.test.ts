@@ -1,9 +1,9 @@
 import { getPackagesSync } from '@manypkg/get-packages';
-import { expect, it, rs } from '@rstest/core';
+import { expect, it, rs } from 'rstack/test';
 import { exec, spawn } from 'child_process';
-import type { PackageWithScripts } from '../src/types';
-import { readPackageJson } from '../src/utils';
-import { WorkspaceDevRunner } from '../src/workspace-dev';
+import type { PackageWithScripts } from '../src/types.ts';
+import { readPackageJson } from '../src/utils.ts';
+import { WorkspaceDevRunner } from '../src/workspace-dev.ts';
 
 const scripts = {
   a: 'dev a',
@@ -77,7 +77,7 @@ rs.mock('@manypkg/get-packages', () => {
   };
 });
 
-rs.mock('../src/utils', () => ({
+rs.mock('../src/utils.ts', () => ({
   readPackageJson: () => {
     const { packages } = getPackagesSync(process.cwd()) as {
       packages: PackageWithScripts[];

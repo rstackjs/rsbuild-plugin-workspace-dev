@@ -1,6 +1,7 @@
-import { defineConfig } from '@rslib/core';
+// Configuration guide: https://rstack.rs/config
+import { define } from 'rstack';
 
-export default defineConfig({
+define.lib({
   lib: [
     {
       syntax: 'es6',
