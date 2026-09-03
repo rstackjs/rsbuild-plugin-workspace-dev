@@ -18,10 +18,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rslib",
-    "dev": "rslib -w"
-  },
-  "devDependencies": {
-    "@rslib/core": "0.23.2"
+    "build": "rs lib",
+    "dev": "rs lib -w"
   }
 }

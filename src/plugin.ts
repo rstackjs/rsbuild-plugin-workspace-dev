@@ -1,9 +1,9 @@
 import type { RsbuildPlugin } from '@rsbuild/core';
-import { Logger } from './logger.js';
+import { Logger } from './logger.ts';
 import {
   WorkspaceDevRunner,
   type WorkspaceDevRunnerOptions,
-} from './workspace-dev.js';
+} from './workspace-dev.ts';
 
 export function pluginWorkspaceDev(
   options?: WorkspaceDevRunnerOptions,

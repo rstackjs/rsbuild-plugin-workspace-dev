@@ -7,10 +7,10 @@ import {
   PLUGIN_LOG_TITLE,
   RSLIB_READY_MESSAGE,
   TSUP_READY_MESSAGE,
-} from './constant.js';
-import { debugLog, Logger } from './logger.js';
-import type { PackageWithScripts } from './types.js';
-import { readPackageJson } from './utils.js';
+} from './constant.ts';
+import { debugLog, Logger } from './logger.ts';
+import type { PackageWithScripts } from './types.ts';
+import { readPackageJson } from './utils.ts';
 
 interface GraphNode {
   name: string;

@@ -1,15 +1,10 @@
 import chalk from 'chalk';
-import { PLUGIN_LOG_TITLE } from './constant.js';
-import { isDebug } from './utils.js';
+import { PLUGIN_LOG_TITLE } from './constant.ts';
+import { isDebug } from './utils.ts';
 
-enum LogType {
-  Stdout = 'stdout',
-  Stderr = 'stderr',
-}
-
-const logMap: Record<LogType, 'log' | 'error'> = {
-  [LogType.Stdout]: 'log',
-  [LogType.Stderr]: 'error',
+const logMap: Record<'stdout' | 'stderr', 'log' | 'error'> = {
+  stdout: 'log',
+  stderr: 'error',
 };
 
 export class Logger {
@@ -55,7 +50,7 @@ export class Logger {
       return;
     }
     this.setBanner(this.name);
-    this.emitLog(LogType.Stdout);
+    this.emitLog('stdout');
   }
 
   static setEndBanner() {

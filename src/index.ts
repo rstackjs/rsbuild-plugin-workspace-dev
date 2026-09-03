@@ -1,5 +1,5 @@
-export { pluginWorkspaceDev } from './plugin.js';
+export { pluginWorkspaceDev } from './plugin.ts';
 export {
   WorkspaceDevRunner,
   type WorkspaceDevRunnerOptions,
-} from './workspace-dev.js';
+} from './workspace-dev.ts';

@@ -2,9 +2,10 @@
   "name": "@e2e/workspace-dev-app",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "build": "rsbuild build",
-    "dev": "rsbuild"
+    "build": "rs build",
+    "dev": "rs dev"
   },
   "dependencies": {
     "@e2e/workspace-dev-components": "workspace:*"

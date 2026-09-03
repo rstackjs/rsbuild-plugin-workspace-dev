@@ -1,5 +1,5 @@
 import type { RsbuildPlugin } from '@rsbuild/core';
-import { TEST_SUIT_STARTED } from '../constant.js';
+import { TEST_SUIT_STARTED } from '../constant.ts';
 
 export function pluginLogAfterStart(): RsbuildPlugin {
   return {
