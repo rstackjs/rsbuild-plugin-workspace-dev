@@ -21,9 +21,9 @@
   },
   "devDependencies": {
     "rslib-module-doc": "workspace:*",
-    "@rsbuild/plugin-react": "^2.1.0",
-    "@rspress/core": "^2.0.21",
-    "@types/node": "^24.13.4",
+    "@rsbuild/plugin-react": "^2.1.1",
+    "@rspress/core": "^2.0.23",
+    "@types/node": "^24.19.2",
     "@types/react": "^19.3.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
